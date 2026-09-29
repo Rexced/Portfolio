@@ -52,8 +52,8 @@ This is plain TypeScript with no third-party service, cookies or IP lookup.
 
 | Piece | Details |
 |---|---|
-| Output | `next build` → `out/` (static export, `trailingSlash: true`, unoptimised images) |
-| Hosting | **GitHub Pages**, free, at `https://rexced.github.io` |
+| Output | `next build` → `out/` (static export, `basePath: "/Portfolio"`, `trailingSlash: true`, unoptimised images) |
+| Hosting | **GitHub Pages**, free, at `https://rexced.github.io/Portfolio/`. The base path must match the repo name. |
 | CI/CD | GitHub Actions (`.github/workflows/deploy.yml`): `npm ci` → `npm run build` → upload `out/` → `actions/deploy-pages` on every push to `main` |
 | Package manager | npm (`package-lock.json`) |
 
@@ -64,15 +64,21 @@ app/          routes: page.tsx (/), pk/, us/, uk/, layout.tsx, globals.css, icon
 components/   page sections (hero, about, projects, skills, contact, navbar) + helpers
 data/         content.ts — every piece of site copy; edit this to update the site
 lib/          region.ts (CV routing), utils.ts (cn helper)
+scripts/      preview.mjs — local server for out/ under the /Portfolio base path
 public/cv/    the three resume / CV PDFs
 ```
 
 ## Commands
 
 ```bash
-npm install          # once
-npm run dev          # live-reloading dev server → http://localhost:3000
+npm install          # once per machine (and after pulling changes to package.json)
+npm run dev          # live-reloading dev server → http://localhost:3000/Portfolio/
 npm run build        # static site → out/
-npx serve out        # preview the built site
+npm start            # preview the built site → http://localhost:4321/Portfolio/
 npm run typecheck    # TypeScript check (tsc --noEmit)
 ```
+
+Because of the `/Portfolio` base path, the site only exists under `/Portfolio/`:
+- **Dev server:** `http://localhost:3000/` is a 404, even though Next prints that address. Add `/Portfolio/`.
+- **Preview:** `npm start` redirects `/` to `/Portfolio/`.
+- **Don't use `npx serve out`.** The pages load their CSS and JS from `/Portfolio/_next/…`, which a plain file server doesn't have, so the site shows up unstyled and broken.

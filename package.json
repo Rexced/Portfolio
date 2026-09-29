@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
     "build": "next build",
-    "start": "serve out -l tcp://0.0.0.0:4321",
+    "start": "node scripts/preview.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -24,7 +24,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "^8.5",
-    "serve": "^14.2.6",
+    "serve-handler": "^6.1.7",
     "tailwindcss": "^4.1.9",
     "typescript": "^5"
   }
