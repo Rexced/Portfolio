@@ -2,14 +2,15 @@
 
 # Saim Wajid's portfolio
 
-A fully static Next.js 16 (App Router) + React 19 + Tailwind v4 site, exported to `out/` and served by GitHub Pages at https://rexced.github.io. There is no server, API or database at runtime. Full stack details are in `TECH_STACK.md`; keep it in sync when the stack changes.
+A fully static Next.js 16 (App Router) + React 19 + Tailwind v4 site, exported to `out/` and served by GitHub Pages at https://rexced.github.io/Portfolio/ (repo `Rexced/Portfolio`). There is no server, API or database at runtime. Full stack details are in `TECH_STACK.md`; keep it in sync when the stack changes.
 
 ## Commands
 
 ```bash
-npm run dev          # dev server on 0.0.0.0:3000 (LAN devices allowed via next.config.mjs)
+npm install          # after every pull; this repo is also worked on from Windows
+npm run dev          # http://localhost:3000/Portfolio/ on 0.0.0.0 (LAN devices allowed via next.config.mjs)
 npm run build        # static export -> out/
-npm start            # serve out/ on :4321
+npm start            # scripts/preview.mjs: serves out/ at http://localhost:4321/Portfolio/
 npm run typecheck    # tsc --noEmit
 ```
 
@@ -27,6 +28,9 @@ There are no tests or linter. Run `npm run typecheck` and `npm run build` to ver
 
 - **Static export only** (`output: "export"`). Don't add route handlers, server actions, middleware, ISR, `next/image` optimisation or anything else that needs a running server.
 - Keep `trailingSlash: true`, since GitHub Pages serves `/us/` as `/us/index.html`.
+- `basePath: "/Portfolio"` must match the GitHub repo name. Next adds it to `<Link>`, `next/font` and `_next` assets, but not to plain `<a href>` or string paths, which is why the PDF paths in `lib/region.ts` hard-code `/Portfolio/cv/...`. If the repo is renamed, update both places.
+- Locally the site only exists under `/Portfolio/`. Don't preview with `npx serve out`: the pages' `/Portfolio/_next/...` assets 404 and the site looks broken.
+- Never put the owner's phone number or WhatsApp on the site. The résumé PDFs contain them, and that's intended.
 - All motion must respect reduced motion (`MotionConfig reducedMotion="user"` plus CSS `prefers-reduced-motion`).
 - The inline theme script in `app/layout.tsx` prevents a theme flash before first paint. Keep it, and keep `suppressHydrationWarning` on `<html>`.
 - Pushing to `main` deploys to production through `.github/workflows/deploy.yml`.

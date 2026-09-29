@@ -10,7 +10,7 @@ export const profile = {
     "I build, automate and secure infrastructure end to end, from self-hosted servers and cloud VMs to SIEM pipelines that help SOC analysts move faster.",
   about: [
     "I'm a Computer Science graduate from IBA Karachi with hands-on experience across Azure, AWS and Oracle Cloud.",
-    "I've run an always-on Oracle Cloud VM, administered headless Linux servers, and shipped containerised services with Docker behind NGINX as a reverse proxy and load balancer. I keep infrastructure private and secure with Tailscale instead of public endpoints, automate with n8n and Python, and version everything in Git.",
+    "I've run an always-on Oracle Cloud VM, administered headless Linux servers, and shipped containerised services with Docker behind NGINX as a reverse proxy and load balancer. I keep infrastructure private and secure with Tailscale instead of public endpoints, automate with n8n and Python, and version everything in Git. Additionally, I programm application to solve problem I have, which presumingly others have too",
     "My SOC internship at Systems Ltd added the security lens: SIEM integration, incident triage, and applying compliance and DLP controls in cloud environments.",
   ],
   email: "saimwajid11@gmail.com",
@@ -36,9 +36,41 @@ export type Project = {
   bullets: string[]
 }
 
-// NOTE: the SIEM pipeline (first entry) will be swapped for Hyperion (Rust Linux system monitor)
-// once that project is ready. Keep entries self-contained so one can replace another.
 export const projects: Project[] = [
+  {
+    slug: "hyperion",
+    title: "Hyperion",
+    subtitle: "Native Linux system monitor",
+    date: "Sep 2026",
+    summary:
+      "A fast, native system monitor written in Rust. It reads CPU, GPU, memory, disk and network stats straight from the Linux kernel and shows them live in a themeable dashboard whose tiles can pop out into their own windows.",
+    tags: ["Rust", "egui / eframe", "procfs & sysfs", "NVML", "Hyprland IPC", "Wayland / X11", "Bash"],
+    metrics: [
+      { value: "15", label: "live metrics: CPU, GPU, RAM, disk, network and more" },
+      { value: "Main GPU vendors", label: "supported: AMD, Intel, NVIDIA" },
+      { value: "27", label: "built-in themes + custom theme editor" },
+      { value: "121", label: "unit tests" },
+      { value: "~9.6k", label: "lines of Rust" },
+      { value: "Arch and Debian", label: "supported with detached tiling" },
+    ],
+    pipeline: [
+      { label: "Linux kernel", detail: "/proc + sysfs" },
+      [
+        { label: "CPU · RAM · disk · net", detail: "procfs + hwmon/RAPL" },
+        { label: "GPUs", detail: "sysfs + NVML" },
+      ],
+      { label: "Samplers", detail: "Rolling history" },
+      { label: "egui dashboard", detail: "Themed tiles + graphs" },
+      { label: "Pop-out windows", detail: "Placed via Hyprland IPC" },
+    ],
+    bullets: [
+      "Built a native Linux system monitor in Rust (eframe/egui) that samples CPU, GPU, memory, disk and network stats directly from /proc and sysfs, with no background daemon.",
+      "Added GPU monitoring across vendors: AMD and Intel through sysfs, and NVIDIA through NVML, loaded at runtime only when the driver is installed.",
+      "Dashboard tiles pop out into their own windows. Wayland doesn't let apps place windows, so a small Hyprland IPC client floats, snaps and positions them.",
+      "Root-only sensors (CPU power via RAPL, drive temperatures) are unlocked by a one-time, opt-in setup step through sudo or pkexec, while the app itself always runs unprivileged.",
+      "Shipped 27 built-in themes plus a custom theme editor with live preview, an install script, and 121 unit tests.",
+    ],
+  },
   {
     slug: "siem-threat-intel",
     title: "SIEM Threat Intelligence Pipeline",
@@ -48,10 +80,10 @@ export const projects: Project[] = [
       "An API-first, containerised platform that plugs automated STIX/TAXII threat intel into the Wazuh SIEM and adds an AI analyst that explains alerts in plain language.",
     tags: ["FastAPI", "React", "Wazuh", "STIX/TAXII", "Gemini API", "MITRE ATT&CK", "Docker"],
     metrics: [
-      { value: "65%", label: "faster threat detection" },
+      { value: "65%", label: "less overhead than default implementation" },
       { value: "18", label: "MITRE ATT&CK techniques mapped" },
       { value: "2-way", label: "indicator ↔ technique correlation" },
-      { value: "Auto", label: "STIX/TAXII intel ingestion" },
+      { value: "Automated", label: "STIX/TAXII intel ingestion" },
       { value: "AI", label: "Gemini plain-language alert triage" },
       { value: "API-first", label: "containerised platform" },
     ],
@@ -79,8 +111,8 @@ export const projects: Project[] = [
     tags: ["Oracle Cloud", "n8n", "Docker", "Tailscale", "NGINX", "iptables"],
     metrics: [
       { value: "24/7", label: "always-on automation" },
-      { value: "$0", label: "recurring hosting cost" },
-      { value: "0", label: "domains or public HTTPS endpoints" },
+      { value: "$0", label: "recurring hosting cost (Free tier)" },
+      { value: "Reverse Proxy", label: "implemented via Caddy between public internet and docker instances" },
       { value: "VPN", label: "Tailscale-only remote access" },
       { value: "n8n", label: "event-triggered pipeline: Notion → charts" },
       { value: "iptables", label: "hardened Docker network" },
@@ -109,9 +141,9 @@ export const projects: Project[] = [
       { value: "$0", label: "recurring cost" },
       { value: "2", label: "paid services replaced (Photos, Netflix)" },
       { value: "4+", label: "self-hosted services" },
-      { value: "0", label: "services exposed publicly" },
-      { value: "DNS", label: "network-wide ad & malware blocking" },
-      { value: "Headless", label: "Ubuntu server from an old laptop" },
+      { value: "0", label: "services at risk of exposure publicly" },
+      { value: "DNS + EDR", label: "network-wide ad & malware blocking" },
+      { value: "Headless", label: "Ubuntu server running on a repurposed old laptop" },
     ],
     pipeline: [
       { label: "Tailscale", detail: "Zero-trust access" },
@@ -163,11 +195,11 @@ export const skills: { group: string; items: string[] }[] = [
   },
   {
     group: "Languages & Frameworks",
-    items: ["Python", "Java", "C++", "JavaScript", "SQL", "FastAPI", "React", "REST APIs"],
+    items: ["Python", "Java", "C++", "JavaScript", "SQL", "FastAPI", "React", "REST APIs", "Rust"],
   },
   {
     group: "AI & Automation",
-    items: ["n8n", "Gemini API", "Gemini CLI", "Claude Code", "VS Code"],
+    items: ["n8n", "HW monitoring", "Gemini API", "Gemini CLI", "Claude Code", "VS Code", "Cursor"],
   },
 ]
 
